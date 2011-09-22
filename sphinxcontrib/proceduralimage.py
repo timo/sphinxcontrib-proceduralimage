@@ -42,7 +42,6 @@ class Proceduralimage(Directive):
         return [node]
 
 def render_proceduralimage(self, code, options):
-    print "rendering proceduralimage yayyay"
     mylocals = dict(alt=None)
     mylocals["image_data"] = None
     mylocals["alt"] = None
@@ -53,8 +52,6 @@ def render_proceduralimage(self, code, options):
 
 def render_proceduralimage_html(self, node, code, options, prefix='proceduralimage',
                     imgcls=None, alt=None):
-
-    print "render proceduralimage html"
 
     # if the image has already been made, take it from the cache
     hashkey = code.encode('utf-8') + str(options)
