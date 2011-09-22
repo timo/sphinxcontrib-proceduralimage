@@ -18,10 +18,13 @@ setup(
     url="https://github.com/timo/sphinxcontrib-proceduralimage",
     zip_safe=False,
     classifiers=[
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'License :: OSI Approved :: BSD License',
         'Topic :: Documentation',
+        'Topic :: Software Development :: Documentation',
         'Topic :: Utilities',
     ],
     platforms='any',
