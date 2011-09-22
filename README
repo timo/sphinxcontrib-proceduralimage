@@ -1,0 +1,12 @@
+This package adds the proceduralimage directive to Sphinx.
+
+.. _Sphinx: http://sphinx.pocoo.org/
+
+It allows a python code snippet to be supplied, that generates an image, that
+will be included in the documentation.
+
+It adds a single directive, `proceduralimage`. It takes a block of python
+code, executes the code and extracts the local variables `image_data` and
+`alt`. image_data will be saved to a .png in _images and embedded and
+the alt variable will be used as the images alt tag.
+
