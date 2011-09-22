@@ -32,3 +32,4 @@ setup(
     install_requires=requires,
     namespace_packages=['sphinxcontrib'],
 )
+
