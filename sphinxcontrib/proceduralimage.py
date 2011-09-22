@@ -41,7 +41,7 @@ class Proceduralimage(Directive):
         node['options'] = []
         return [node]
 
-def render_proceduralimage(self, code, options):
+def render_proceduralimage(self, code):
     mylocals = dict(alt=None)
     mylocals["image_data"] = None
     mylocals["alt"] = None
@@ -50,20 +50,24 @@ def render_proceduralimage(self, code, options):
 
     return mylocals["image_data"], mylocals["alt"]
 
-def render_proceduralimage_html(self, node, code, options, prefix='proceduralimage',
-                    imgcls=None, alt=None):
-
+def make_proceduralimage_files(self, node, code, prefix='proceduralimage'):
     # if the image has already been made, take it from the cache
-    hashkey = code.encode('utf-8') + str(options)
+    hashkey = code.encode('utf-8')
     fname = '%s-%s.%s' % (prefix, sha(hashkey).hexdigest(), "png")
 
-    relfn = posixpath.join(self.builder.imgpath, fname)
-    outfn = path.join(self.builder.outdir, '_images', fname)
+    if hasattr(self.builder, 'imgpath'):
+        # HTML
+        relfn = posixpath.join(self.builder.imgpath, fname)
+        outfn = path.join(self.builder.outdir, '_images', fname)
+    else:
+        # LaTeX
+        relfn = fname
+        outfn = path.join(self.builder.outdir, fname)
 
     if not path.isfile(outfn):
 
         try:
-            image_data, alt = render_proceduralimage(self, code, options)
+            image_data, alt = render_proceduralimage(self, code)
         except ProceduralimageError, exc:
             self.builder.warn('proceduralimage code %r: ' % code + str(exc))
             raise nodes.SkipNode
@@ -83,6 +87,12 @@ def render_proceduralimage_html(self, node, code, options, prefix='proceduralima
         if not alt:
             alt = None
 
+    return relfn, alt
+
+def render_proceduralimage_html(self, node, code, options, prefix='proceduralimage',
+                    imgcls=None, alt=None):
+    relfn, alt = make_proceduralimage_files(self, node, code, prefix)
+
     self.body.append(self.starttag(node, 'p', CLASS='proceduralimage'))
     if relfn is None:
         self.body.append(self.encode(code))
@@ -93,11 +103,26 @@ def render_proceduralimage_html(self, node, code, options, prefix='proceduralima
     self.body.append('</p>\n')
     raise nodes.SkipNode
 
+def render_proceduralimage_latex(self, node, code, options, prefix="proceduralimage"):
+    try:
+        fname, alt = make_proceduralimage_files(self, node, code, prefix)
+    except ProceduralimageError, exc:
+        self.builder.warn('proceduralimage code %r: ' % code + str(exc))
+        raise nodes.SkipNode
+
+    if fname is not None:
+        self.body.append('\n\\includegraphics{%s}\n' % fname)
+    raise nodes.SkipNode
+
 def html_visit_proceduralimage(self, node):
     render_proceduralimage_html(self, node, node['code'], node['options'])
 
+def latex_visit_proceduralimage(self, node):
+    render_proceduralimage_latex(self, node, node['code'], node['options'])
+
 def setup(app):
     app.add_node(proceduralimage,
-                 html=(html_visit_proceduralimage, None))
+                 html=(html_visit_proceduralimage, None),
+                 latex=(latex_visit_proceduralimage, None))
     app.add_directive('proceduralimage', Proceduralimage)
 

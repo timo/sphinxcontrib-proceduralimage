@@ -9,7 +9,7 @@ requires = ['Sphinx>=1.0']
 
 setup(
     name='sphinxcontrib-proceduralimage',
-    version='0.1.1',
+    version='0.2',
     license='BSD',
     author='Timo Paulssen',
     author_email='timonator@perpetuum-immobile.de',
