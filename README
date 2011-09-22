@@ -1,4 +1,4 @@
-This package adds the proceduralimage directive to Sphinx.
+This package adds the proceduralimage directive to Sphinx_.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 
