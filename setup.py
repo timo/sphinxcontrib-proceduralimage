@@ -3,7 +3,7 @@
 from setuptools import setup
 
 with open("README") as readme:
-    long_description = readme
+    long_description = readme.read()
 
 requires = ['Sphinx>=1.0']
 
