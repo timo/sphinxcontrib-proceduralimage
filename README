@@ -10,3 +10,8 @@ code, executes the code and extracts the local variables `image_data` and
 `alt`. image_data will be saved to a .png in _images and embedded and
 the alt variable will be used as the images alt tag.
 
+Acknowledgements
+----------------
+
+The code is based almost entirely on sphinx.ext.graphviz.
+
